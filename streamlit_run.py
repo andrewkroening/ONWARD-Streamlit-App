@@ -11,12 +11,11 @@ st.set_page_config(
 )
 
 import pandas as pd
-import numpy as np
-import branca
 import json
 import requests
 import nws_tools as nws
-import opensky_tools as opensky
+
+# import opensky_tools as opensky
 import constants as c
 
 
