@@ -86,6 +86,8 @@ folium.Choropleth(
 folium.LayerControl().add_to(m)
 st.write(m)
 
+
+"""Code in holding for a future application"""
 # # get the state abbreviation for the selected state
 # state_abbr = c.STATES[location]
 # # get the latitude and longitude for the selected state from the state_coords_df
