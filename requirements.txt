@@ -1,0 +1,10 @@
+black
+pytest
+pylint
+click
+ipython
+docker
+pandas
+streamlit
+geopandas
+altair
