@@ -9,66 +9,46 @@ import folium
 from constants import STATE_COORDINATES, STATES, COLOR_VALUES, BREAKS, COLOR_RANGE
 
 
-def m():
-    url = "https://raw.githubusercontent.com/python-visualization/folium/master/examples/data"
-    state_geo = f"{url}/us-states.json"
-    state_unemployment = f"{url}/US_Unemployment_Oct2012.csv"
-    state_data = pd.read_csv(state_unemployment)
+def color_scale(val: float) -> list:
+    for i, b in enumerate(BREAKS):
+        if val <= b:
+            return COLOR_RANGE[i]
+    return COLOR_RANGE[i]
 
-    map = folium.Map(location=[48, -102], zoom_start=3)
 
-    folium.Choropleth(
-        geo_data=state_geo,
-        name="choropleth",
-        data=state_data,
-        columns=["State", "Unemployment"],
-        key_on="feature.id",
-        fill_color="YlGn",
-        fill_opacity=0.7,
-        line_opacity=0.2,
-        legend_name="Unemployment Rate (%)",
-    ).add_to(map)
+def map_visualization(state_data: pd.DataFrame) -> folium.Map:
+    """Creates a map of the US with states color coded by the severity of alerts and opacity by the number of alerts.
 
-    folium.LayerControl().add_to(map)
+    Args:
+        state_data (pd.DataFrame): A dataframe of the weather data.
+
+    Returns:
+        folium.Map: A map of the US with states color coded by the severity of alerts and opacity by the number of alerts.
+    """
+    # Create the map
+    map = folium.Map(location=[39.8283, -98.5795], zoom_start=4)
+
+    # Add the states to the map
+    for state in STATES.values():
+        # Get the data for the state
+        state_df = state_data[state_data["state"] == state]
+        # Get the number of alerts
+        num_alerts = len(state_df)
+        # Get the severity of the alerts
+        severity = state_df["severity_score"].max()
+        # Get the color for the state based using the severity_score and the color_scale function
+        color = color_scale(severity)
+        # Add the state to the map
+        folium.Choropleth(
+            geo_data=STATE_COORDINATES[state],
+            name=state,
+            data=state_df,
+            columns=["state", "severity"],
+            key_on="feature.id",
+            fill_color=color,
+            fill_opacity=num_alerts / 10,
+            line_opacity=0.2,
+            legend_name="Severity of Alerts",
+        ).add_to(map)
 
     return map
-
-
-# # Get the color range for the map
-# def color_scale(val: float) -> list:
-#     for i, b in enumerate(BREAKS):
-#         if val <= b:
-#             return COLOR_RANGE[i]
-#     return COLOR_RANGE[i]
-
-
-# # Make the map
-# def make_map(
-#     geo_df: pd.DataFrame,
-#     df: pd.DataFrame,
-#     map_feature: str,
-#     data_format: str = "Raw Values",
-#     show_transit: bool = False,
-# ):
-#     """This function will render the map for the app."""
-
-#     pass
-
-
-# m = folium.Map(location=[48, -102], zoom_start=3)
-
-# folium.Choropleth(
-#     geo_data=state_geo,
-#     name="choropleth",
-#     data=state_data,
-#     columns=["State", "Unemployment"],
-#     key_on="feature.id",
-#     fill_color="YlGn",
-#     fill_opacity=0.7,
-#     line_opacity=0.2,
-#     legend_name="Unemployment Rate (%)",
-# ).add_to(m)
-
-# folium.LayerControl().add_to(m)
-
-# m

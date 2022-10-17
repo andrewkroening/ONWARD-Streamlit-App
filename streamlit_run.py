@@ -1,5 +1,4 @@
 import streamlit as st
-import streamlit_folium as st_folium
 import folium
 
 
@@ -70,14 +69,7 @@ st.metric(
 
 st.selectbox("Select a State", c.STATES.keys())
 
-# center on Liberty Bell, add marker
-m = folium.Map(location=[39.949610, -75.150282], zoom_start=16)
-folium.Marker(
-    [39.949610, -75.150282], popup="Liberty Bell", tooltip="Liberty Bell"
-).add_to(m)
-
-# call to render Folium map in Streamlit
-m
+viz.map_visualization(state_data())
 
 # convert the STATE_COORDINATES dictionary to a dataframe
 state_df = pd.DataFrame.from_dict(
@@ -86,11 +78,3 @@ state_df = pd.DataFrame.from_dict(
 
 # merge the state_data and state_df dataframes on the state column
 state_wx_and_loc = state_df.merge(state_data(), on="state")
-
-# drop alaska and hawaii from the dataframe
-state_wx_and_loc = state_wx_and_loc[
-    (state_wx_and_loc["state"] != "AK") & (state_wx_and_loc["state"] != "HI")
-]
-
-# create a map of the U.S. with the number of alerts for each state
-st.map(state_wx_and_loc)

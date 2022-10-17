@@ -145,3 +145,15 @@ COLOR_VALUES = [
 ]
 
 BREAKS = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]
+
+# make a bar chart of the COLOR_VALUES using matplotlib
+
+
+def make_color_bar():
+    fig = plt.figure(figsize=(10, 1))
+    ax = fig.add_axes([0.05, 0.80, 0.9, 0.15])
+    cmap = mpl.colors.ListedColormap(COLOR_VALUES)
+    norm = mpl.colors.BoundaryNorm(BREAKS, cmap.N)
+    cb = mpl.colorbar.ColorbarBase(ax, cmap=cmap, norm=norm, orientation="horizontal")
+    cb.set_ticks([])
+    fig.savefig("colorbar.png", dpi=300, bbox_inches="tight")
