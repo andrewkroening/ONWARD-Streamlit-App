@@ -1,4 +1,3 @@
-[![CI/CD Pipeline to Docker Hub](https://github.com/nogibjj/Flight-Delay-Project-Kroening/actions/workflows/docker_ci_cd.yml/badge.svg)](https://github.com/nogibjj/Flight-Delay-Project-Kroening/actions/workflows/docker_ci_cd.yml)
 
 # Airline Delay Information Project
 
