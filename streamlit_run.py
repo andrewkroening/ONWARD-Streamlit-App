@@ -1,11 +1,6 @@
-from turtle import onclick
 import streamlit as st
-import pandas as pd
-import altair as alt
-
-import nws_tools as nws
-import opensky_tools as opensky
-import constants as c
+import streamlit_folium as st_folium
+import folium
 
 
 st.set_page_config(
@@ -15,6 +10,13 @@ st.set_page_config(
     initial_sidebar_state="auto",
     menu_items=None,
 )
+
+import pandas as pd
+
+import nws_tools as nws
+import opensky_tools as opensky
+import constants as c
+import visualization as viz
 
 # Header, Subheader, and Caption will be useful
 
@@ -67,6 +69,15 @@ st.metric(
 )
 
 st.selectbox("Select a State", c.STATES.keys())
+
+# center on Liberty Bell, add marker
+m = folium.Map(location=[39.949610, -75.150282], zoom_start=16)
+folium.Marker(
+    [39.949610, -75.150282], popup="Liberty Bell", tooltip="Liberty Bell"
+).add_to(m)
+
+# call to render Folium map in Streamlit
+m
 
 # convert the STATE_COORDINATES dictionary to a dataframe
 state_df = pd.DataFrame.from_dict(

@@ -6,8 +6,8 @@ import geopandas as gpd
 
 # import requests
 
-from logic.nws_tools import get_alerts, package_alerts, alert_info, alerts_for_state
-from logic.opensky_tools import count_us_aircraft, get_opensky_data
+from nws_tools import get_alerts, package_alerts, alert_info, alerts_for_state
+from opensky_tools import count_us_aircraft, get_opensky_data
 
 app = FastAPI()
 
