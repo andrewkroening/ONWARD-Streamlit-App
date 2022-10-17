@@ -11,38 +11,21 @@ st.set_page_config(
 )
 
 import pandas as pd
-
+import numpy as np
+import branca
+import json
+import requests
 import nws_tools as nws
 import opensky_tools as opensky
 import constants as c
-import visualization as viz
-
-# Header, Subheader, and Caption will be useful
-
-# st.button for the refresh data button
-
-# st.metric(label, value, delta=None, delta_color="normal", help=None) for the total flights
-
-# st.map(data=None, zoom=None, use_container_width=True) for the map
-
-# st.selectbox(label, options, index=0, format_func=special_internal_function, key=None, help=None, on_change=None, args=None, kwargs=None, *, disabled=False, label_visibility="visible") for what state you are looking at
-
-# st.sidebar for the sidebar to show aggregate data unless a state is selected, then show state data
-
-# st.spinner(text="In progress...") just because
 
 
-def state_data():
-    """Gets state data"""
-    # get the latest compiled weather alerts
-    state_data = nws.compiled_alerts()
-    return state_data
+state_df, county_geo = nws.state_data_func()
 
+# create a dataframe of the state coordinates from the STATE_LIST dictionary
+state_coords_df = pd.DataFrame.from_dict(c.STATE_COORDINATES, orient="index")
 
-def aircraft_data():
-    # get the latest aircraft data
-    open_data = opensky.count_us_aircraft()
-    return open_data
+# opensky_count = opensky.count_us_aircraft()
 
 
 def aircraft_delta(air_data):
@@ -54,27 +37,93 @@ def aircraft_delta(air_data):
         return "-LOW"
 
 
-st.title("Welcome to NOAH")
+st.title("Welcome to ONWARD")
 
-st.subheader("The NWS-OpenSky Alamgamated Hub")
+st.subheader("The OpenSky-National Weather and Aircraft Reporting Dashboard")
 
-st.button("Refresh Data", on_click=aircraft_data)
+col1, col2 = st.columns(2, gap="medium")
 
-st.metric(
-    "Airborne Flights",
-    aircraft_data(),
-    delta=aircraft_delta(aircraft_data()),
-    delta_color="inverse",
-)
+with col1:
+    st.caption("Aircraft in the US")
+    # st.metric(
+    #     "Total Airborne Flights",
+    #     opensky_count,
+    #     delta=aircraft_delta(opensky_count),
+    #     delta_color="inverse",
+    # )
 
-st.selectbox("Select a State", c.STATES.keys())
+with col2:
+    st.metric(
+        "Total Weather Alerts",
+        state_df["total_alerts"].sum(),
+        delta=None,
+        delta_color="off",
+    )
 
-viz.map_visualization(state_data())
 
-# convert the STATE_COORDINATES dictionary to a dataframe
-state_df = pd.DataFrame.from_dict(
-    c.STATE_COORDINATES, orient="index", columns=["state", "lat", "lon"]
-)
+# location = st.selectbox("Select a Destination State", c.STATES.keys())
 
-# merge the state_data and state_df dataframes on the state column
-state_wx_and_loc = state_df.merge(state_data(), on="state")
+# pull in the base US geojson file
+url = "https://raw.githubusercontent.com/python-visualization/folium/main/examples/data"
+us_states = f"{url}/us-states.json"
+
+state_geo = json.loads(requests.get(us_states).text)
+
+# create a map of the US
+m = folium.Map(location=[43, -100], zoom_start=4)
+# create a choropleth map
+folium.Choropleth(
+    geo_data=state_geo,
+    name="choropleth",
+    data=state_df,
+    columns=["state", "severity_score"],
+    key_on="feature.id",
+    fill_color="YlOrRd",
+    fill_opacity=0.2,
+    line_opacity=0.2,
+    legend_name="Alert Severity Score",
+).add_to(m)
+
+folium.LayerControl().add_to(m)
+st.write(m)
+
+# # get the state abbreviation for the selected state
+# state_abbr = c.STATES[location]
+# # get the latitude and longitude for the selected state from the state_coords_df
+# state_lat = state_coords_df.loc[state_abbr, "lat"]
+# state_long = state_coords_df.loc[state_abbr, "lon"]
+
+# # create a map of the selected state
+# m = folium.Map(
+#     location=[state_lat, state_long], zoom_start=6, tiles="cartodbpositron"
+# )
+
+# colormap = branca.colormap.LinearColormap(
+#     vmin=0,
+#     vmax=1,
+#     colors=["red", "orange", "lightblue", "green", "darkgreen"],
+#     caption="Alert Severity",
+# )
+
+# folium.GeoJson(
+#     county_geo,
+#     style_function=lambda x: {
+#         "fillColor": colormap(x["properties"]["serverity_score"]),
+#         "color": "black",
+#         "fillOpacity": 0.4,
+#     },
+# ).add_to(m)
+
+# # create a choropleth map
+# # folium.Choropleth(
+# #     geo_data=county_geo,
+# #     name="choropleth",
+# #     columns=["county", "severity_score", "coordinates"],
+# #     fill_color="YlOrRd",
+# #     fill_opacity=0.2,
+# #     line_opacity=0.2,
+# #     legend_name="Alert Severity",
+# # ).add_to(m)
+
+# # folium.LayerControl().add_to(m)
+# st.write(m)
