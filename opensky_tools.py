@@ -4,6 +4,14 @@ import requests
 import pandas as pd
 
 
+def get_opensky_data():
+    """Get the data from the OpenSky API"""
+    url = "https://opensky-network.org/api/states/all"
+    response = requests.get(url, timeout=5)
+    data = response.json()
+    return data
+
+
 # define a function to count the number of aircraft over the US
 def count_us_aircraft():
     """Count the number of aircraft over the US"""
@@ -19,11 +27,3 @@ def count_us_aircraft():
             ):
                 us_aircraft += 1
     return us_aircraft
-
-
-def get_opensky_data():
-    """Get the data from the OpenSky API"""
-    url = "https://opensky-network.org/api/states/all"
-    response = requests.get(url, timeout=5)
-    data = response.json()
-    return data

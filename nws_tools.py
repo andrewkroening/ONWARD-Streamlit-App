@@ -99,33 +99,3 @@ def compiled_alerts():
     )
     # return the dataframe
     return state_alerts_df
-
-
-# these two functions are for testing purposes and will be removed later
-
-
-def alert_info():
-    """Get basic summary stats from the alerts"""
-    # get the df object from the NWS API
-    alert_df = package_alerts()
-    # print the total number of alerts
-    print("Total number of alerts: ", len(alert_df))
-    # print the number of active alerts from senderName "WS"
-    print("National-Level Alerts: ", len(alert_df[alert_df["senderName"] == "WS"]))
-    # print the number of active alerts after dropping rows where the senderName is "WS"
-    print("State-Level Alerts: ", len(alert_df[alert_df["senderName"] != "WS"]))
-    # print number of extreme alerts
-    print("Extreme Alerts: ", len(alert_df[alert_df["severity"] == "Extreme"]))
-    # print the five states with the most active alerts
-    print(
-        "States with the most active alerts: \n",
-        alert_df["senderName"].value_counts().head(),
-    )
-
-
-def alerts_for_state(state):
-    """Return a dataframe of all active alerts for a given state"""
-    # get the df object from the NWS API
-    alert_df = package_alerts()
-    # return a count of the number of alerts by severity for a given state
-    return alert_df[alert_df["senderName"] == state]
