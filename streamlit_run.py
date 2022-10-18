@@ -36,14 +36,16 @@ st.title("Welcome to ONWARD")
 
 st.subheader("The OpenSky-National Weather and Aircraft Reporting Dashboard")
 
-col1, col2 = st.columns(2, gap="small")
+col1, col2 = st.columns((1, 2))
+
+col3, col4 = st.columns((1, 2))
 
 with col1:
     st.metric(
         "Total Airborne Flights",
         opensky_count,
-        delta=aircraft_delta(opensky_count),
-        delta_color="inverse",
+        delta=None,
+        delta_color="off",
     )
 
 with col2:
@@ -56,7 +58,6 @@ with col2:
             "There are currently less than 5400 aircraft in the air. This is below some upper threshold the FAA thinks makes for a busy sky."
         )
 
-col3, col4 = st.columns(2, gap="small")
 
 with col3:
     st.metric(
@@ -75,6 +76,11 @@ with col4:
         st.success(
             "There are currently less than 500 weather alerts nationwide. This seems like a good day to fly."
         )
+
+
+st.caption(
+    "The map below will display a state's name, the total active weather alerts and a severity score. The severity score is a weighted calculation for the severity of the weather alerts active in that state and is on a scale of 0 to 1."
+)
 
 
 # create a map of the US
