@@ -18,9 +18,9 @@
 
 #### Here's what Phase I that looked like with a [demo video here](https://youtu.be/RnMwroCijJQ)
 
-* Downloaded a [dataset from Kaggle](https://www.kaggle.com/datasets/ryanjt/airline-delay-cause) that details roughly 20 years of airline flight delay.
-* Used a [Jupyter Notebook to do some EDA](https://github.com/andrewkroening/ONWARD-Streamlit-App/blob/0faa42f9fd5ff6ba68067c99ef84cf423a945e9a/eda/Airline_Delay_EDA.ipynb) on that dataset. Concluded that delays spike in the summer and around the winter holidays (shocking, I know)
-* Built a tool to query the National Weather Service for all active weather alerts. Get it from [nws_tools](https://github.com/andrewkroening/ONWARD-Streamlit-App/blob/0faa42f9fd5ff6ba68067c99ef84cf423a945e9a/nws_tools.py)
+* Downloaded a [dataset from Kaggle](https://www.kaggle.com/datasets/ryanjt/airline-delay-cause) that details roughly 20 years of airline flight delays.
+* Used a [Jupyter Notebook to do some EDA](https://github.com/andrewkroening/ONWARD-Streamlit-App/blob/0faa42f9fd5ff6ba68067c99ef84cf423a945e9a/eda/Airline_Delay_EDA.ipynb) on that dataset. Concluded that delays spike in the summer and around the winter holidays (shocking, I know).
+* Built a tool to query the National Weather Service for all active weather alerts. Get it from [nws_tools.](https://github.com/andrewkroening/ONWARD-Streamlit-App/blob/0faa42f9fd5ff6ba68067c99ef84cf423a945e9a/nws_tools.py)
 * I used a databricks cluster to temporarily house the data, but have since depreciated that feature because it was overkill for how much data we have here.
 
 #### If you are more of a visual person, here's a little sketch of the first chunk of the project before it was overhauled to build the Streamlit App.
