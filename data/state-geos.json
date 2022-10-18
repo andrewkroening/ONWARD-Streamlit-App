@@ -5,7 +5,7 @@
             "type": "Feature",
             "id": "AL",
             "properties": {
-                "name": "Alabama",
+                "name": "Alabama"
             },
             "geometry": {
                 "type": "Polygon",
