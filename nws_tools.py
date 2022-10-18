@@ -178,6 +178,9 @@ def state_data_func():
     alerts_df = package_alerts(all_alerts)
     state_alerts_df = compiled_alerts(alerts_df)
     county_geo_alerts = county_geo_json(all_alerts)
-    # save the county_geo_alerts to a json file
 
     return state_alerts_df, county_geo_alerts
+
+
+if __name__ == "__main__":
+    state_data_func()

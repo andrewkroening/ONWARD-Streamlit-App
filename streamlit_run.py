@@ -10,18 +10,15 @@ st.set_page_config(
     menu_items=None,
 )
 
-import pandas as pd
-import json
-import requests
 import nws_tools as nws
 import opensky_tools as opensky
+import state_json_transform as state_json
 import constants as c
-
 
 state_df, county_geo = nws.state_data_func()
 
-# create a dataframe of the state coordinates from the STATE_LIST dictionary
-state_coords_df = pd.DataFrame.from_dict(c.STATE_COORDINATES, orient="index")
+state_geo_json = state_json.state_geo_json_transform(state_df)
+
 
 opensky_count = opensky.count_us_aircraft()
 
@@ -39,7 +36,7 @@ st.title("Welcome to ONWARD")
 
 st.subheader("The OpenSky-National Weather and Aircraft Reporting Dashboard")
 
-col1, col2 = st.columns(2, gap="medium")
+col1, col2 = st.columns(2, gap="small")
 
 with col1:
     st.metric(
@@ -50,6 +47,18 @@ with col1:
     )
 
 with col2:
+    if opensky_count > 5400:
+        st.warning(
+            "There are currently more than 5400 aircraft in the air. This is above some upper threshold the FAA thinks makes for a busy sky."
+        )
+    if opensky_count < 5400:
+        st.success(
+            "There are currently less than 5400 aircraft in the air. This is below some upper threshold the FAA thinks makes for a busy sky."
+        )
+
+col3, col4 = st.columns(2, gap="small")
+
+with col3:
     st.metric(
         "Total Weather Alerts",
         state_df["total_alerts"].sum(),
@@ -57,26 +66,22 @@ with col2:
         delta_color="off",
     )
 
-if opensky_count > 5400:
-    st.warning(
-        "There are currently more than 5400 aircraft in the air. This is above some upper threshold the FAA thinks makes for a busy sky."
-    )
-if opensky_count < 5400:
-    st.success(
-        "There are currently less than 5400 aircraft in the air. This is below some upper threshold the FAA thinks makes for a busy sky."
-    )
+with col4:
+    if state_df["total_alerts"].sum() > 500:
+        st.warning(
+            "There are currently more than 500 weather alerts nationwide. This seems like a lot, you might want to check local weather."
+        )
+    else:
+        st.success(
+            "There are currently less than 500 weather alerts nationwide. This seems like a good day to fly."
+        )
 
-# pull in the base US geojson file
-url = "https://raw.githubusercontent.com/python-visualization/folium/main/examples/data"
-us_states = f"{url}/us-states.json"
-
-state_geo = json.loads(requests.get(us_states).text)
 
 # create a map of the US
 m = folium.Map(location=[43, -100], zoom_start=4)
 # create a choropleth map
-folium.Choropleth(
-    geo_data=state_geo,
+cp = folium.Choropleth(
+    geo_data=state_geo_json,
     name="choropleth",
     data=state_df,
     columns=["state", "severity_score"],
@@ -88,10 +93,22 @@ folium.Choropleth(
 ).add_to(m)
 
 folium.LayerControl().add_to(m)
+
+# add a tool tip of the state name, total alerts, and severity score
+folium.features.GeoJsonTooltip(
+    fields=["name", "severity", "total_alerts"],
+    aliases=["State", "Severity Score", "Total Alerts"],
+).add_to(cp.geojson)
+
 st.write(m)
 
 
+################################################
 # """Code in holding for a future application"""
+################################################
+
+# create a dataframe of the state coordinates from the STATE_LIST dictionary
+# state_coords_df = pd.DataFrame.from_dict(c.STATE_COORDINATES, orient="index")
 
 # location = st.selectbox("Select a Destination State", c.STATES.keys())
 
