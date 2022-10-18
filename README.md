@@ -15,6 +15,7 @@
 * Modified the existing tools to add additional formats for future features.
 * Added a [constants](https://github.com/andrewkroening/ONWARD-Streamlit-App/blob/0faa42f9fd5ff6ba68067c99ef84cf423a945e9a/constants.py) to house some specific variables that I used throughout.
 * Added a [data directory](https://github.com/andrewkroening/ONWARD-Streamlit-App/tree/main/data) for some specific data sources that built the map visual in the app and will be necessary for future features.
+* Built a small module to transform a GeoJSON of state data and add weather alert info for rendering. That tool is called [state JSON transform.](https://github.com/andrewkroening/ONWARD-Streamlit-App/blob/a63352dc1888fa3588b093c962474b599f9f4d98/state_json_transform.py)
 
 #### Here's what Phase I that looked like with a [demo video here](https://youtu.be/RnMwroCijJQ)
 
