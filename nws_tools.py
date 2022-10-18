@@ -6,7 +6,7 @@
 import requests
 import pandas as pd
 import json
-from constants import STATES, STATE_COLUMNS, STATE_LIST
+from constants import STATE_LIST
 
 url = "https://raw.githubusercontent.com/python-visualization/folium/main/examples/data"
 us_states = f"{url}/us-states.json"
@@ -20,10 +20,6 @@ def get_alerts():
     url = "https://api.weather.gov/alerts/active"
     # send the request to the NWS API
     response = requests.get(url, timeout=5)
-    # save the get_alerts output to a JSON file in the current directiory
-    with open("alerts.json", "w") as outfile:
-        outfile.write(response.text)
-
     # return the response from the NWS API
     return response.json()
 
@@ -183,11 +179,5 @@ def state_data_func():
     state_alerts_df = compiled_alerts(alerts_df)
     county_geo_alerts = county_geo_json(all_alerts)
     # save the county_geo_alerts to a json file
-    with open("county_geo_alerts.json", "w") as f:
-        json.dump(county_geo_alerts, f)
 
     return state_alerts_df, county_geo_alerts
-
-
-if __name__ == "__main__":
-    state_data_func()

@@ -1,8 +1,6 @@
 """Create a module to handle the OpenSky API"""
 
-from lib2to3.refactor import get_all_fix_names
 import requests
-import pandas as pd
 import json
 
 
@@ -11,6 +9,9 @@ def get_opensky_data():
     url = "https://opensky-network.org/api/states/all"
     response = requests.get(url, timeout=5)
     data = response.json()
+    # If the response is not 200, return an empty dictionary
+    if response.status_code != 200:
+        return {}
     return data
 
 
@@ -32,4 +33,4 @@ def count_us_aircraft():
 
 
 if __name__ == "__main__":
-    print(get_opensky_data())
+    print(count_us_aircraft())

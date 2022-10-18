@@ -176,9 +176,6 @@ STATE_COLUMNS = [
     "total_alerts_100",
 ]
 
-COUNTY_COLUMNS = ["state", "county", "severity", "coordinates"]
-
-
 COLOR_RANGE = [
     [65, 182, 196],
     [127, 205, 187],

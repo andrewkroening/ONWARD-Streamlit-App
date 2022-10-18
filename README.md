@@ -2,7 +2,7 @@
 
 ### Introduction
 
-#### Hi there! Welcome to this project. Below is a little map of what I'm trying to do here. This project is intended to exercise a few different things I've never done before, so the engineering might not make total sense.
+#### Hi there! Welcome to this project. Below is a little map of what I'm trying to do here. This project is intended to exercise a few different things I've never done before, so the engineering might not make total sense
 
 #### Here's a little sketch of what I'm trying to accomplish. The general theme is that I'm going to construct several microservices and then attempt to string them together to accomplish some data engineering tasks. The final output should be some kind of interface that returns some indicators about the potential status of a flight that day
 

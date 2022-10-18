@@ -14,8 +14,7 @@ import pandas as pd
 import json
 import requests
 import nws_tools as nws
-
-# import opensky_tools as opensky
+import opensky_tools as opensky
 import constants as c
 
 
@@ -24,7 +23,7 @@ state_df, county_geo = nws.state_data_func()
 # create a dataframe of the state coordinates from the STATE_LIST dictionary
 state_coords_df = pd.DataFrame.from_dict(c.STATE_COORDINATES, orient="index")
 
-# opensky_count = opensky.count_us_aircraft()
+opensky_count = opensky.count_us_aircraft()
 
 
 def aircraft_delta(air_data):
@@ -43,13 +42,12 @@ st.subheader("The OpenSky-National Weather and Aircraft Reporting Dashboard")
 col1, col2 = st.columns(2, gap="medium")
 
 with col1:
-    st.caption("Aircraft in the US")
-    # st.metric(
-    #     "Total Airborne Flights",
-    #     opensky_count,
-    #     delta=aircraft_delta(opensky_count),
-    #     delta_color="inverse",
-    # )
+    st.metric(
+        "Total Airborne Flights",
+        opensky_count,
+        delta=aircraft_delta(opensky_count),
+        delta_color="inverse",
+    )
 
 with col2:
     st.metric(
@@ -59,8 +57,14 @@ with col2:
         delta_color="off",
     )
 
-
-# location = st.selectbox("Select a Destination State", c.STATES.keys())
+if opensky_count > 5400:
+    st.warning(
+        "There are currently more than 5400 aircraft in the air. This is above some upper threshold the FAA thinks makes for a busy sky."
+    )
+if opensky_count < 5400:
+    st.success(
+        "There are currently less than 5400 aircraft in the air. This is below some upper threshold the FAA thinks makes for a busy sky."
+    )
 
 # pull in the base US geojson file
 url = "https://raw.githubusercontent.com/python-visualization/folium/main/examples/data"
@@ -87,7 +91,10 @@ folium.LayerControl().add_to(m)
 st.write(m)
 
 
-"""Code in holding for a future application"""
+# """Code in holding for a future application"""
+
+# location = st.selectbox("Select a Destination State", c.STATES.keys())
+
 # # get the state abbreviation for the selected state
 # state_abbr = c.STATES[location]
 # # get the latitude and longitude for the selected state from the state_coords_df
