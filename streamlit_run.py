@@ -95,8 +95,6 @@ st.caption(
 
 st.write("")
 
-st.write("hello")
-
 # create a map of the US
 m = folium.Map(location=[39, -97], zoom_start=4)
 # create a choropleth map
