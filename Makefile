@@ -3,8 +3,9 @@ install:
 		pip install -r requirements.txt
 
 lint:
-	pylint --disable=R,C --extension-pkg-whitelist='pydantic' main.py --ignore-patterns=test_.*?py *.py logic/*.py
+	pylint --disable=R,C --extension-pkg-whitelist='pydantic' streamlit_run.py
 
-refactor: lint
+format:
+	black *.py
 
-all: install lint
+all: install lint format

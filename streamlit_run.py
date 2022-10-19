@@ -13,7 +13,8 @@ st.set_page_config(
 import nws_tools as nws
 import opensky_tools as opensky
 import state_json_transform as state_json
-import constants as c
+
+# import constants as c
 
 state_df, county_geo = nws.state_data_func()
 
