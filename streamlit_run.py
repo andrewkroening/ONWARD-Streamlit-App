@@ -3,7 +3,7 @@ import folium
 
 
 st.set_page_config(
-    page_title="Main Landing",
+    page_title="ONWARD",
     page_icon="🛫",
     layout="centered",
     initial_sidebar_state="auto",
