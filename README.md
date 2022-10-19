@@ -20,7 +20,7 @@
 
 #### Here's what Phase II consisted of and a [demo video here](https://youtu.be/8AwRbXZaN1c)
 
-* Build a simple web app to deploy through the [Streamlit cloud service.](https://andrewkroening-onward-streamlit-app-streamlit-run-qga9dp.streamlitapp.com/)
+* Build a simple web app to deploy through the [Streamlit cloud service.](https://onward.streamlitapp.com/)
 * Added a tool to query OpenSky for flight counts. You can find it [here.](https://github.com/andrewkroening/ONWARD-Streamlit-App/blob/0faa42f9fd5ff6ba68067c99ef84cf423a945e9a/opensky_tools.py)
 * Modified the existing tools to add additional formats for future features.
 * Added a [constants](https://github.com/andrewkroening/ONWARD-Streamlit-App/blob/0faa42f9fd5ff6ba68067c99ef84cf423a945e9a/constants.py) to house some specific variables that I used throughout.
