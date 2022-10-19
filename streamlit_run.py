@@ -98,7 +98,7 @@ st.write("")
 st.write("hello")
 
 # create a map of the US
-m = folium.Map(location=[39, -99], zoom_start=4)
+m = folium.Map(location=[39, -97], zoom_start=4)
 # create a choropleth map
 cp = folium.Choropleth(
     geo_data=state_geo_json,
