@@ -121,8 +121,9 @@ folium.features.GeoJsonTooltip(
 
 st.write(m)
 
+st.markdown("")
 st.markdown("Hi, I'm Andrew. Thanks for checking out my app. It's not intended for anything serious, just a demo of the capabilities of Streamlit. I hope you enjoy it!")
-st.markdown("Check out this [GitHub repo](https://github.com/andrewkroening/ONWARD-Streamlit-App) or watch the [YouTube demo video](https://youtu.be/8AwRbXZaN1c)")
+st.markdown("Check out the [GitHub repo](https://github.com/andrewkroening/ONWARD-Streamlit-App) or watch the [YouTube demo video](https://youtu.be/8AwRbXZaN1c) here. Cheers!")
 
 
 ################################################
