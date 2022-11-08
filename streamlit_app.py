@@ -21,7 +21,7 @@ state_df, county_geo = nws.state_data_func()
 state_geo_json = state_json.state_geo_json_transform(state_df)
 
 
-# opensky_count = opensky.count_us_aircraft()
+opensky_count = opensky.count_us_aircraft()
 
 
 def aircraft_delta(air_data):
@@ -37,31 +37,31 @@ st.title("Welcome to ONWARD")
 
 st.subheader("The OpenSky-National Weather and Aircraft Reporting Dashboard")
 
-# # col1, col2 = st.columns((1, 3))
+col1, col2 = st.columns((1, 3))
 
 col3, col4 = st.columns((1, 3))
 
-# with col1:
-#     st.metric(
-#         "Total Airborne Flights",
-#         opensky_count,
-#         delta=None,
-#         delta_color="off",
-#     )
+with col1:
+    st.metric(
+        "Total Airborne Flights",
+        opensky_count,
+        delta=None,
+        delta_color="off",
+    )
 
-# with col2:
-#     if opensky_count > 5400:
-#         st.error(
-#             "There are currently more than 5400 aircraft in the air. This is above some upper threshold the FAA thinks makes for a busy sky."
-#         )
-#     elif opensky_count > 5000:
-#         st.warning(
-#             "There are currently more than 5000 aircraft in the air. This is getting crowded."
-#         )
-#     else:
-#         st.success(
-#             "There are currently less than 5000 aircraft in the air. The skies don't look too busy."
-#         )
+with col2:
+    if opensky_count > 5400:
+        st.error(
+            "There are currently more than 5400 aircraft in the air. This is above some upper threshold the FAA thinks makes for a busy sky."
+        )
+    elif opensky_count > 5000:
+        st.warning(
+            "There are currently more than 5000 aircraft in the air. This is getting crowded."
+        )
+    else:
+        st.success(
+            "There are currently less than 5000 aircraft in the air. The skies don't look too busy."
+        )
 
 
 with col3:
