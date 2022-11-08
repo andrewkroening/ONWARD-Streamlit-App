@@ -1,5 +1,7 @@
 import streamlit as st
 import folium
+import branca
+import pandas as pd
 
 
 st.set_page_config(
@@ -20,6 +22,13 @@ state_df, county_geo = nws.state_data_func()
 
 state_geo_json = state_json.state_geo_json_transform(state_df)
 
+airports = pd.read_csv("data/airports.csv")
+
+# unpack the county geo as a data frame called county_colors with an index number  and a severity and severity score column from the properties
+county_colors = (
+    pd.DataFrame(county_geo["features"]).properties.apply(pd.Series).reset_index()
+)
+# county_colors = pd.DataFrame(county_geo)
 
 # opensky_count = opensky.count_us_aircraft()
 
@@ -75,7 +84,7 @@ with col3:
 with col4:
     if state_df["total_alerts"].sum() > 600:
         st.error(
-            "There are currently more than 500 weather alerts nationwide. This seems like a lot, you might want to check local weather."
+            "There are currently more than 600 weather alerts nationwide. This seems like a lot, you might want to check local weather."
         )
     elif state_df["total_alerts"].sum() > 500:
         st.warning(
@@ -91,33 +100,46 @@ st.write("")
 st.subheader("Current Weather Alerts by State")
 
 st.caption(
-    "The map below will display a state's name, the total active weather alerts and a severity score. The severity score is a weighted calculation for the severity of the weather alerts active in that state and is on a scale of 0 to 1."
+    "The map below will show the current weather alearts active in the United States. The color density and color give a clue to the severity and volume."
 )
 
 st.write("")
 
+####################
+#### Map Writer ####
+####################
+
+# set the colorscale using a branca colormap
+colorscale = branca.colormap.linear.YlOrRd_09.scale(0, 1)
+
+# define a style function that takes a feature and returns a style dictionary
+def style_function(feature):
+    # get the severity score from the feature properties
+    severity_score = feature["properties"]["severity_score"]
+    # get the color for the severity score
+    color = colorscale(severity_score)
+    # return a style dictionary
+    return {"fillColor": color, "color": "black", "weight": 1, "fillOpacity": 0.05}
+
+
 # create a map of the US
-m = folium.Map(location=[39, -96], zoom_start=4)
-# create a choropleth map
-cp = folium.Choropleth(
-    geo_data=county_geo,
-    name="choropleth",
-    data=state_df,
-    columns=["state", "severity_score"],
-    key_on="feature.state",
-    fill_color="YlOrRd",
-    fill_opacity=0.2,
-    line_opacity=0.2,
-    legend_name="Alert Severity Score",
+m = folium.Map(location=[39, -96], tiles="cartodbpositron", zoom_start=4)
+
+# add the airports to the map
+# for i in range(0, len(airports)):
+#     folium.Marker(
+#         location=[airports.iloc[i]["latitude"], airports.iloc[i]["longitude"]],
+#         popup=airports.iloc[i]["name"],
+#         icon=folium.Icon(color="blue", icon="plane"),
+#     ).add_to(m)
+
+# add the geojson to the map
+gj = folium.GeoJson(
+    county_geo,
+    name="geojson",
+    style_function=style_function,
+    zoom_on_click=True,
 ).add_to(m)
-
-folium.LayerControl().add_to(m)
-
-# add a tool tip of the state name, total alerts, and severity score
-folium.features.GeoJsonTooltip(
-    fields=["name", "severity", "total_alerts"],
-    aliases=["State", "Severity Score", "Total Alerts"],
-).add_to(cp.geojson)
 
 st.write(m)
 
