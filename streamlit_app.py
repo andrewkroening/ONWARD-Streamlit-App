@@ -100,11 +100,11 @@ st.write("")
 m = folium.Map(location=[39, -96], zoom_start=4)
 # create a choropleth map
 cp = folium.Choropleth(
-    geo_data=county_geo,
+    geo_data=state_geo_json,
     name="choropleth",
     data=state_df,
     columns=["state", "severity_score"],
-    key_on="feature.state",
+    key_on="feature.id",
     fill_color="YlOrRd",
     fill_opacity=0.2,
     line_opacity=0.2,
