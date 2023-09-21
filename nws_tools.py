@@ -114,18 +114,34 @@ def compiled_alerts(alert_df):
     # add missing states from teh constants States list with all zeroes
     for state in STATE_LIST:
         if state not in state_alerts_df["state"].values:
-            state_alerts_df = state_alerts_df.append(
-                {
-                    "state": state,
-                    "total_alerts": 0,
-                    "extreme_alerts": 0,
-                    "severe_alerts": 0,
-                    "moderate_alerts": 0,
-                    "minor_alerts": 0,
-                    "total_alerts_per_100": 0,
-                    "severity_score": 0,
-                },
-                ignore_index=True,
+            state_alerts_df = pd.concat(
+                [
+                    state_alerts_df,
+                    pd.DataFrame(
+                        [
+                            [
+                                state,
+                                0,
+                                0,
+                                0,
+                                0,
+                                0,
+                                0,
+                                0,
+                            ]
+                        ],
+                        columns=[
+                            "state",
+                            "total_alerts",
+                            "extreme_alerts",
+                            "severe_alerts",
+                            "moderate_alerts",
+                            "minor_alerts",
+                            "total_alerts_per_100",
+                            "severity_score",
+                        ],
+                    ),
+                ]
             )
     # return the dataframe
     return state_alerts_df
