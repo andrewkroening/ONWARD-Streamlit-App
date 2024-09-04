@@ -12,7 +12,7 @@
 
 ![alt text](https://github.com/andrewkroening/ONWARD-Streamlit-App/blob/0faa42f9fd5ff6ba68067c99ef84cf423a945e9a/little_tools/Project_roadmap.png?raw=true)
 
-#### I'm currently working on Phase III of the project
+#### Phase III of the project might have included this work, but it's stopped for now:
 
 * Refine the map interface to provide better insights.
 * Allow users to select a destination for insights.
